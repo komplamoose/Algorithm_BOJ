@@ -1,7 +1,10 @@
-// 1026, Silver 4, 보물
+// 1026, Silver 4, 蹂대Ъ
 // https://www.acmicpc.net/problem/1026
 #include <iostream>
 #include <vector>
+#include <algorithm>
+
+using namespace std;
 
 vector<int> a;
 vector<int> b;
@@ -13,6 +16,8 @@ void solve(int n)
 		cin >> input;
 		a.push_back(input);
 	}
+	
+	sort(a.begin(),a.end());
 
 	for (int i = 0; i < n; i++) {
 		int input;
@@ -20,7 +25,14 @@ void solve(int n)
 		b.push_back(input);
 	}
 
-	// a에서 가장 작은 값을 찾고, b에서 가장 큰 값을 찾아 매칭시킨다. 
+	sort(b.begin(),b.end());
+	
+	int sum=0;
+	for (int i=0 ; i<n;i++){
+		sum += a[i]*b[n-i-1];
+	}
+
+	cout << sum << "\n";
 }
 
 int main()
