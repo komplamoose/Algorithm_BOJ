@@ -35,4 +35,13 @@
 *.out
 *.app
 
+# Ignore all
+*
+
+# Unignore all with extensions
+!*.*
+
+# Unignore all dirs
+!*/
+
 # End of https://www.toptal.com/developers/gitignore/api/c++
