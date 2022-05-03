@@ -1,52 +1,41 @@
 // 1182, Silver 2, 부분수열의 합
 // https://www.acmicpc.net/problem/1182
+// 매 순간 더할지, 안더할지 이진트리 형태로 구성가능
 #include <iostream>
 #include <vector>
-#include <algorithm>
-#include <numeric>
+
 using namespace std;
-int n, m;
-vector<int> v;
-int arr[20];
-int check[20]={0,};
 
-int result=0;
+int n, s;
 
-int solve(int cnt)
+int cnt=0;
+
+int nums[30];
+
+void solve(int sum, int cur)
 {
-    if (accumulate(arr,arr+cnt,0)==m){
-        result++;
-        return 0;
+    if (cur==n){
+        if (sum==s) cnt++;
+        return;
     }else{
-        for (int i=0; i<v.size(); i++){
-            if (check[i]==0){
-                arr[cnt]=v[i];
-                check[i]=1;
-                solve(cnt+1);
-                check[i]=0;
-            }
-        }
+        solve(sum, cur+1); // 그대로 숫자 넣지말고 유지하는 경우
+        solve(sum+nums[cur], cur+1); // 다음 숫자 넣어보는 경우
     }
-    return 1;
 }
 
 int main()
 {
-    cin.tie(NULL); 
-    ios_base::sync_with_stdio(false);
-    cin >> n >> m;
+    ios::sync_with_stdio(false);
+    cin.tie(0);
 
-    v.resize(n);
-    for (int i=0; i<n;i++){
-        int input;
-        cin >> input;
-        v[i]=input;
+    cin >> n >> s;
+
+    for (int i=0; i<n; i++){
+        cin >> nums[i];
     }
-    
-    sort(v.begin(),v.end());
 
-    solve(0);
+    solve(0, 0);
 
-    cout << result << "\n";
-    return 0;
+    if (s==0) cnt--;
+    cout << cnt << "\n";
 }
