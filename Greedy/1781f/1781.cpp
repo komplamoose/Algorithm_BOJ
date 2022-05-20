@@ -1,73 +1,45 @@
-// 1781, 컵라면, Greedy
-// 데드라인 스케줄링
 #include <iostream>
 #include <vector>
+#include <queue>
 #include <algorithm>
 
 using namespace std;
 
+vector<pair<int, int>> v;
 int n;
-
-typedef long long int lli;
-
-bool compare(pair<lli, int> a, pair<lli, int> b)
-{
-    if (a.first==b.first) {
-        return a.second> b.second;
-    }
-    return a.first > b.first;
-}
-
-pair<lli, int> schedule[200002]; // profit - deadling
-bool s[200002];
-
-bool possibleCheck(vector<pair<lli, int>> temp)
-{
-    for (int i=0; i < temp.size(); i++) {
-        if (temp[i].second < i+1) return 0;
-    }
-    return 1;
-} 
-
-
-void solve()
-{
-    vector<pair<lli, int>> S;
-    vector<pair<lli, int>> K;
-    S.push_back(schedule[0]); // 제일 큰거 일단 집어넣음
-    
-    for (int i=1; i<n; i++) {
-        K.resize(S.size());
-        copy(S.begin(), S.end(), K.begin());
-        int index=0;
-        while(index < K.size() && K[index].second <= schedule[i].second)
-            index++;
-        K.insert(K.begin()+index, schedule[i]);
-
-        if (possibleCheck(K)){
-            S.resize(K.size());
-            copy(K.begin(), K.end(), S.begin());
-        }
-    }
-
-    int sum=0;
-    for (auto loop : S) {
-        sum += loop.first;
-    }
-    cout << sum;
-}
 
 int main()
 {
+    long long int answer=0;
     ios::sync_with_stdio(false);
     cin.tie(0);
+
     cin >> n;
 
+    v.resize(n);
+
     for (int i=0; i<n; i++) {
-        cin >> schedule[i].second >> schedule[i].first;
+        cin >> v[i].first >> v[i].second;
+        v[i].first--;
     }
 
-    sort(schedule, schedule+n, compare);
+    sort(v.begin(), v.end()); // 데드라인 기준으로 오름차순 정렬
 
-    solve();
+    int index=n-1; // 데드라인 가장 긴 놈부터 선택
+    priority_queue<int> PQ;
+
+    for (int i=n-1; i>=0; i--) { // 스케줄을 뒤에서부터 선택함
+        while(index>=0 && v[index].first == i){ // 제일 끝 데드라인과 동일한 데드라인들끼리 비교
+            PQ.push(v[index].second);
+            index--;
+        }
+
+        // 만약 데드라인이 i라면, i+1의 데드라인을 가진 놈도 거기 들어갈 수 있음
+        if (!PQ.empty()) {
+            answer += PQ.top(); // i번째 스케줄 선택
+            PQ.pop();
+        }
+    }
+
+    cout << answer << endl;
 }
