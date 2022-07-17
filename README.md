@@ -1,3 +1,3 @@
 ### BOJ Source code
 
-For Baekjoon Online Judge
+백준 코드 저장소
